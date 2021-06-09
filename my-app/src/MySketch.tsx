@@ -98,9 +98,6 @@ function barnes_hut_simulation(points:[number,number][], factor:number){
         qt.query(new Circle(p.x,p.y,RADIUS)).forEach(n=>{
 			let neighbour = points_clone[n.data];
 
-            let delta = [neighbour[0] - point[0], neighbour[1] - point[1]]
-            let dist = Math.sqrt(delta[0]**2 + delta[1]**2)
-            
             let force = repelling_force(point,neighbour);
 
             points[p.data] = [points[p.data][0]+force[0], points[p.data][1]+force[1]];
@@ -136,29 +133,32 @@ const MySketch: React.FC<MySketchProps> = (props: MySketchProps) => {
 	};
 
 	const draw = (p5: p5Types) => {
-		p5.background(240,240,240,40);
+		p5.background(240,240,240);
 
 		_.zip(v_points,points,bh_points).forEach(ps=>{
 			let [v_p,p,bh_p] = ps;
 
 			p5.strokeWeight(1);
-			p5.stroke(0,0,0,50);
+			p5.stroke(0,0,0);
 			p5.line(v_p![0]*SIZE,v_p![1]*SIZE,p![0]*SIZE,p![1]*SIZE);
 
 			p5.strokeWeight(1);
-			p5.stroke(0,0,0,50);
+			p5.stroke(0,0,0);
 			p5.line(p![0]*SIZE,p![1]*SIZE,bh_p![0]*SIZE,bh_p![1]*SIZE);
 
-			p5.strokeWeight(10)
-			p5.stroke(20,200,50,50);
+			//Spawn location
+			p5.strokeWeight(5)
+			p5.stroke(0,0,200);
 			p5.point(p![0]*SIZE,p![1]*SIZE);
 
-			p5.strokeWeight(5)
-			p5.stroke(200,0,50,50);
+			//Voronoi location
+			p5.strokeWeight(7)
+			p5.stroke(200,0,50);
 			p5.point(v_p![0]*SIZE,v_p![1]*SIZE);
 
-			p5.strokeWeight(5)
-			p5.stroke(50,0,200,50);
+			//Barnes-hut location
+			p5.strokeWeight(7)
+			p5.stroke(20,200,50);
 			p5.point(bh_p![0]*SIZE,bh_p![1]*SIZE);
 			
 		})
